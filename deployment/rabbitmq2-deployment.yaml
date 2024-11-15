@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq2
+  template:
+    metadata:
+      labels:
+        app: rabbitmq2
+    spec:
+      containers:
+      - name: rabbitmq2
+        image: rabbitmq:management
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: "user2"
+        - name: RABBITMQ_DEFAULT_PASS
+          value: "password2"
+        volumeMounts:
+        - name: rabbitmq2-config
+          mountPath: /etc/rabbitmq/rabbitmq.conf
+          subPath: rabbitmq.conf
+      volumes:
+      - name: rabbitmq2-config
+        configMap:
+          name: rabbitmq2-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq2-service
+spec:
+  ports:
+  - name: amqp
+    port: 5673
+    targetPort: 5672
+  - name: management  
+    port: 15673
+    targetPort: 15672
+  selector:
+    app: rabbitmq2

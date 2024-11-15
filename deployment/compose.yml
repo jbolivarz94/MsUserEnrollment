@@ -1,0 +1,37 @@
+# Docker Compose script to set up two RabbitMQ brokers
+version: '3.8'
+
+services:
+  rabbitmq1:
+    image: rabbitmq:management
+    container_name: rabbitmq1
+    ports:
+      - "15672:15672" # Management UI
+      - "5672:5672"   # AMQP protocol
+    networks:
+      custom_network:
+        ipv4_address: 172.20.0.2
+    environment:
+      RABBITMQ_DEFAULT_USER: user1
+      RABBITMQ_DEFAULT_PASS: password1
+
+  rabbitmq2:
+    image: rabbitmq:management
+    container_name: rabbitmq2
+    ports:
+      - "15673:15672"
+      - "5673:5673"
+    networks:
+      custom_network:
+        ipv4_address: 172.20.0.3
+    environment:
+      RABBITMQ_DEFAULT_USER: user2
+      RABBITMQ_DEFAULT_PASS: password2
+    volumes:
+      - ./rabbitmq2.conf:/etc/rabbitmq
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

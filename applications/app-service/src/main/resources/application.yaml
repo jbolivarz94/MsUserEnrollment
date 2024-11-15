@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "MsUserEnrollment"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+aws:
+  region: "us-east-1"
+  secret-manager:
+    svp: ${secretSvp}
+    app: ${secretApp}
+localstack: ${localstack}

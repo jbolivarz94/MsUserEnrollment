@@ -1,0 +1,32 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	implementation project(':async-event-handler')
+    implementation 'com.github.bancolombia:aws-secrets-manager-sync:4.4.22'
+	implementation project(':metrics')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'software.amazon.awssdk:secretsmanager'
+    implementation 'software.amazon.awssdk:sts'
+    implementation 'org.reactivecommons:async-commons-rabbit-starter:4.1.4'
+    //implementation 'org.reactivecommons:async-commons-rabbit-starter:5.1.0-beta'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    testImplementation 'com.tngtech.archunit:archunit:1.3.0'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+}
+
+tasks.register('explodedJar', Copy) {
+    with jar
+    into layout.buildDirectory.dir("exploded")
+}
+
+jar {
+    // To disable the *-plain.jar
+    enabled = false
+}
+
+bootJar {
+    // Sets output jar name
+    archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
+}

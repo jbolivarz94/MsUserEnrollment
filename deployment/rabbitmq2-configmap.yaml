@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq2-config
+data:
+  rabbitmq.conf: |
+    listeners.tcp.default = 5673
